@@ -89,6 +89,12 @@ const Index = () => {
     setWardrobe((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const wearItem = (id: string) => {
+    setWardrobe((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, timesWorn: item.timesWorn + 1 } : item))
+    );
+  };
+
   const addItem = (item: ClothingItem) => {
     setWardrobe((prev) => [item, ...prev]);
   };
@@ -231,6 +237,7 @@ const Index = () => {
         onClose={() => setSelectedItem(null)}
         onToggleFavorite={toggleFavorite}
         onDelete={deleteItem}
+        onWear={wearItem}
       />
     </div>
   );
