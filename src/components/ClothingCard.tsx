@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Heart } from "lucide-react";
 
 export interface ClothingItem {
@@ -33,61 +32,56 @@ export const ClothingCard = ({ item, onToggleFavorite, onClick }: ClothingCardPr
 
   return (
     <div
-      className="group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-card hover:shadow-hover hover:-translate-y-1"
-      style={{ background: "var(--gradient-card)" }}
+      className="ios-card cursor-pointer active:scale-95 transition-transform duration-150"
       onClick={() => onClick(item)}
     >
       {/* Image */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-muted">
-        {!imgLoaded && (
-          <div className="absolute inset-0 animate-shimmer" />
-        )}
+      <div className="relative aspect-[3/4] bg-muted overflow-hidden">
+        {!imgLoaded && <div className="absolute inset-0 animate-shimmer" />}
         <img
           src={item.image}
           alt={item.name}
-          className={`w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+          className={`w-full h-full object-cover object-top transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
           onLoad={() => setImgLoaded(true)}
         />
 
         {/* Favorite button */}
         <button
-          className="absolute top-3 right-3 p-2 rounded-full bg-background/80 backdrop-blur-sm transition-all duration-200 hover:scale-110 z-10"
+          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-background/75 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-transform z-10"
           onClick={(e) => {
             e.stopPropagation();
             onToggleFavorite(item.id);
           }}
         >
           <Heart
-            size={14}
+            size={13}
             className={item.favorite ? "fill-rose text-rose" : "text-muted-foreground"}
           />
         </button>
 
-        {/* Category badge */}
-        <div className="absolute top-3 left-3">
-          <span className={`text-[10px] font-body font-medium tracking-widest uppercase px-2 py-1 rounded-full ${categoryColors[item.category] || "bg-muted text-muted-foreground"}`}>
+        {/* Category label */}
+        <div className="absolute top-2.5 left-2.5">
+          <span className="text-[9px] font-semibold tracking-widest uppercase px-2 py-1 rounded-full bg-background/75 backdrop-blur-sm text-foreground">
             {item.category}
           </span>
         </div>
       </div>
 
       {/* Info */}
-      <div className="p-4">
-        <p className="font-display text-lg leading-snug text-foreground">{item.name}</p>
+      <div className="px-3 py-2.5">
+        <p className="text-[14px] font-semibold text-foreground tracking-tight leading-snug">{item.name}</p>
         {item.brand && (
-          <p className="font-body text-xs text-muted-foreground mt-0.5 tracking-wide uppercase">{item.brand}</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-wide">{item.brand}</p>
         )}
-        <div className="flex items-center justify-between mt-3">
-          <p className="font-body text-xs text-muted-foreground">
-            Worn <span className="text-foreground font-medium">{item.timesWorn}x</span>
+        <div className="flex items-center justify-between mt-2">
+          <p className="text-[11px] text-muted-foreground">
+            Worn <span className="text-foreground font-semibold">{item.timesWorn}×</span>
           </p>
-          <div className="flex gap-1">
-            {item.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className="text-[10px] font-body bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
-                {tag}
-              </span>
-            ))}
-          </div>
+          {item.tags.slice(0, 1).map((tag) => (
+            <span key={tag} className="text-[9px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full uppercase tracking-wide">
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
     </div>
