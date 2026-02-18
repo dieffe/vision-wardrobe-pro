@@ -1,10 +1,7 @@
 import { useState, useRef } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Upload, Sparkles, Camera, CheckCircle } from "lucide-react";
+import { Upload, Sparkles, Camera, CheckCircle, X, ChevronLeft } from "lucide-react";
 import mannequinBase from "@/assets/mannequin-base.png";
 import { ClothingItem } from "./ClothingCard";
 
@@ -29,7 +26,6 @@ export const AddClothingModal = ({ open, onClose, onAdd }: AddClothingModalProps
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
     setStep("analyzing");
-    // Simulate AI analysis
     setTimeout(() => {
       setName("Silk Button-Up Blouse");
       setCategory("Tops");
@@ -72,30 +68,46 @@ export const AddClothingModal = ({ open, onClose, onAdd }: AddClothingModalProps
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md bg-background border-border rounded-2xl p-0 overflow-hidden">
-        {/* Header */}
-        <div className="px-8 pt-8 pb-4">
-          <DialogHeader>
-            <DialogTitle className="font-display text-3xl font-light text-foreground">
-              {step === "upload" && "Add a piece"}
-              {step === "analyzing" && "Analysing..."}
-              {step === "review" && "Looking good"}
-            </DialogTitle>
-            <p className="font-body text-sm text-muted-foreground mt-1">
-              {step === "upload" && "Upload a photo — our AI will do the rest"}
-              {step === "analyzing" && "AI is recreating your garment on a mannequin"}
-              {step === "review" && "Confirm the details before saving"}
-            </p>
-          </DialogHeader>
+      <DialogContent className="max-w-[430px] w-full h-[85dvh] bottom-0 top-auto translate-y-0 rounded-t-3xl rounded-b-none p-0 overflow-hidden ios-modal-bg border-0 fixed left-1/2 -translate-x-1/2">
+
+        {/* Handle */}
+        <div className="ios-sheet-handle" />
+
+        {/* iOS-style nav header */}
+        <div className="flex items-center justify-between px-5 pt-3 pb-1">
+          {step !== "upload" ? (
+            <button
+              onClick={() => setStep("upload")}
+              className="flex items-center gap-0.5 text-[16px] font-medium text-accent active:opacity-60"
+            >
+              <ChevronLeft size={20} strokeWidth={2.5} />
+              Back
+            </button>
+          ) : <div className="w-16" />}
+
+          <h2 className="text-[17px] font-semibold text-foreground tracking-tight">
+            {step === "upload" && "Add Piece"}
+            {step === "analyzing" && "Analysing"}
+            {step === "review" && "Review"}
+          </h2>
+
+          <button
+            onClick={handleClose}
+            className="w-8 h-8 rounded-full bg-muted flex items-center justify-center active:opacity-60"
+          >
+            <X size={15} className="text-muted-foreground" />
+          </button>
         </div>
 
-        <div className="px-8 pb-8">
+        <div className="flex-1 overflow-y-auto px-5 pb-6 pt-4">
           {/* STEP: Upload */}
           {step === "upload" && (
             <div className="space-y-4">
+              <p className="text-[14px] text-muted-foreground">Upload a photo — our AI will recreate it on a mannequin.</p>
+
               <div
-                className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 cursor-pointer ${
-                  dragOver ? "border-accent bg-rose-light/50" : "border-border hover:border-accent/50 hover:bg-muted/50"
+                className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-200 cursor-pointer ${
+                  dragOver ? "border-accent bg-rose-light/40" : "border-border"
                 }`}
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                 onDragLeave={() => setDragOver(false)}
@@ -106,62 +118,58 @@ export const AddClothingModal = ({ open, onClose, onAdd }: AddClothingModalProps
                   ref={fileRef}
                   type="file"
                   accept="image/*"
+                  capture="environment"
                   className="hidden"
                   onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
                 />
                 <div className="flex flex-col items-center gap-3">
-                  <div className="w-14 h-14 rounded-full gradient-rose flex items-center justify-center">
-                    <Upload size={22} className="text-primary-foreground" />
+                  <div className="w-16 h-16 rounded-full gradient-rose flex items-center justify-center">
+                    <Upload size={24} className="text-primary-foreground" />
                   </div>
                   <div>
-                    <p className="font-body font-medium text-foreground">Drop your photo here</p>
-                    <p className="font-body text-sm text-muted-foreground mt-1">or click to browse</p>
+                    <p className="text-[16px] font-semibold text-foreground">Choose Photo</p>
+                    <p className="text-[13px] text-muted-foreground mt-0.5">or drag and drop</p>
                   </div>
-                  <p className="font-body text-xs text-muted-foreground">JPG, PNG, HEIC up to 20MB</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-border" />
-                <span className="font-body text-xs text-muted-foreground">or</span>
-                <div className="flex-1 h-px bg-border" />
-              </div>
-
-              <Button
-                variant="outline"
-                className="w-full rounded-xl border-border font-body font-light gap-2 h-12"
+              {/* Camera button */}
+              <button
+                className="w-full flex items-center justify-center gap-2 rounded-2xl border border-border bg-card py-4 text-[16px] font-medium text-foreground active:opacity-70"
                 onClick={() => fileRef.current?.click()}
               >
-                <Camera size={16} />
-                Take a photo
-              </Button>
+                <Camera size={18} className="text-accent" />
+                Take Photo
+              </button>
             </div>
           )}
 
           {/* STEP: Analyzing */}
           {step === "analyzing" && (
-            <div className="flex flex-col items-center gap-6 py-4">
+            <div className="flex flex-col items-center gap-6 pt-4">
               <div className="relative">
-                <div className="w-32 h-44 rounded-xl overflow-hidden shadow-card">
+                <div className="w-36 h-48 rounded-2xl overflow-hidden shadow-card">
                   <img src={previewUrl || mannequinBase} alt="uploaded" className="w-full h-full object-cover object-top" />
                 </div>
-                <div className="absolute -right-3 -top-3 w-10 h-10 rounded-full gradient-rose flex items-center justify-center shadow-soft">
-                  <Sparkles size={16} className="text-primary-foreground animate-pulse" />
+                <div className="absolute -right-3 -top-3 w-11 h-11 rounded-full gradient-rose flex items-center justify-center shadow-soft">
+                  <Sparkles size={18} className="text-primary-foreground animate-pulse" />
                 </div>
               </div>
-              <div className="text-center space-y-2">
-                <div className="flex items-center justify-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <div className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <div className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "300ms" }} />
-                </div>
-                <p className="font-body text-sm text-muted-foreground">Identifying fabric, colour & fit…</p>
+
+              <div className="text-center">
+                <p className="text-[17px] font-semibold text-foreground">AI is working…</p>
+                <p className="text-[13px] text-muted-foreground mt-1">Rendering your piece on a mannequin</p>
               </div>
-              <div className="w-full space-y-2">
-                {["Detecting garment type", "Analysing colour palette", "Rendering on mannequin"].map((text, i) => (
-                  <div key={text} className="flex items-center gap-3 opacity-0 animate-slide-up" style={{ animationDelay: `${i * 600}ms`, animationFillMode: "forwards" }}>
-                    <CheckCircle size={14} className="text-accent shrink-0" />
-                    <p className="font-body text-sm text-muted-foreground">{text}</p>
+
+              <div className="w-full space-y-3">
+                {["Detecting garment type", "Analysing colour & fabric", "Rendering on mannequin"].map((text, i) => (
+                  <div
+                    key={text}
+                    className="flex items-center gap-3 opacity-0 animate-slide-up"
+                    style={{ animationDelay: `${i * 600}ms`, animationFillMode: "forwards" }}
+                  >
+                    <CheckCircle size={16} className="text-accent shrink-0" />
+                    <p className="text-[14px] text-muted-foreground">{text}</p>
                   </div>
                 ))}
               </div>
@@ -173,24 +181,27 @@ export const AddClothingModal = ({ open, onClose, onAdd }: AddClothingModalProps
             <div className="space-y-5 animate-slide-up">
               {previewUrl && (
                 <div className="flex justify-center">
-                  <div className="w-28 h-36 rounded-xl overflow-hidden shadow-card ring-2 ring-accent/30">
+                  <div className="w-32 h-40 rounded-2xl overflow-hidden shadow-card ring-2 ring-accent/30">
                     <img src={previewUrl} alt="garment" className="w-full h-full object-cover object-top" />
                   </div>
                 </div>
               )}
-              <div className="space-y-3">
-                <div>
-                  <Label className="font-body text-xs uppercase tracking-widest text-muted-foreground">Name</Label>
-                  <Input
+
+              {/* iOS grouped list style form */}
+              <div className="rounded-2xl overflow-hidden bg-card border border-border divide-y divide-border">
+                <div className="flex items-center px-4 py-3 gap-3">
+                  <span className="text-[14px] text-muted-foreground w-20 shrink-0">Name</span>
+                  <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="mt-1 rounded-xl border-border font-body font-light bg-background"
+                    className="flex-1 bg-transparent text-[14px] text-foreground outline-none font-medium"
+                    placeholder="Garment name"
                   />
                 </div>
-                <div>
-                  <Label className="font-body text-xs uppercase tracking-widest text-muted-foreground">Category</Label>
+                <div className="flex items-center px-4 py-3 gap-3">
+                  <span className="text-[14px] text-muted-foreground w-20 shrink-0">Category</span>
                   <Select value={category} onValueChange={setCategory}>
-                    <SelectTrigger className="mt-1 rounded-xl border-border font-body font-light bg-background">
+                    <SelectTrigger className="flex-1 bg-transparent border-0 shadow-none p-0 h-auto text-[14px] font-medium focus:ring-0">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -200,23 +211,24 @@ export const AddClothingModal = ({ open, onClose, onAdd }: AddClothingModalProps
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
-                  <Label className="font-body text-xs uppercase tracking-widest text-muted-foreground">Brand</Label>
-                  <Input
+                <div className="flex items-center px-4 py-3 gap-3">
+                  <span className="text-[14px] text-muted-foreground w-20 shrink-0">Brand</span>
+                  <input
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
-                    className="mt-1 rounded-xl border-border font-body font-light bg-background"
+                    className="flex-1 bg-transparent text-[14px] text-foreground outline-none font-medium"
                     placeholder="Optional"
                   />
                 </div>
               </div>
-              <Button
-                className="w-full rounded-xl h-12 font-body font-medium gradient-rose border-0 text-primary-foreground hover:opacity-90 transition-opacity"
+
+              <button
+                className="w-full ios-primary-btn justify-center disabled:opacity-40"
                 onClick={handleAdd}
                 disabled={!name || !category}
               >
-                Save to wardrobe
-              </Button>
+                Save to Wardrobe
+              </button>
             </div>
           )}
         </div>
