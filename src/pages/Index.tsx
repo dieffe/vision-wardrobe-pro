@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Plus, Sparkles, Search, Shirt, Heart, Home } from "lucide-react";
 import { ClothingCard, ClothingItem } from "@/components/ClothingCard";
 import { AddClothingModal } from "@/components/AddClothingModal";
-import { OutfitSuggester } from "@/components/OutfitSuggester";
+import { OutfitChatbot } from "@/components/OutfitChatbot";
 import { ClothingDetailModal } from "@/components/ClothingDetailModal";
 
 import mannequinBlouse from "@/assets/mannequin-blouse.png";
@@ -230,7 +230,7 @@ const Index = () => {
 
       {/* Modals */}
       <AddClothingModal open={addOpen} onClose={() => setAddOpen(false)} onAdd={addItem} />
-      <OutfitSuggester open={outfitOpen} onClose={() => setOutfitOpen(false)} wardrobe={wardrobe} />
+      <OutfitChatbot open={outfitOpen} onClose={() => setOutfitOpen(false)} wardrobe={wardrobe} />
       <ClothingDetailModal
         item={selectedItem}
         open={!!selectedItem}

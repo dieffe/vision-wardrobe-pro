@@ -1,0 +1,4 @@
+project_id = "clcdasoiudtcwgkxzlip"
+
+[functions.outfit-chat]
+verify_jwt = false
