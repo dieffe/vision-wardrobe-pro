@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock, User, Sparkles, ChevronLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ChevronLeft } from "lucide-react";
+import vestryLogo from "@/assets/vestry-logo.png";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,12 +33,12 @@ const Register = () => {
 
         {/* Brand */}
         <div className="flex flex-col items-center mb-8 animate-fade-in">
-          <div
-            className="w-16 h-16 rounded-2xl gradient-rose flex items-center justify-center mb-4"
+          <img
+            src={vestryLogo}
+            alt="Vestry logo"
+            className="w-16 h-16 rounded-2xl mb-4"
             style={{ boxShadow: "0 8px 32px -8px hsl(7 52% 68% / 0.5)" }}
-          >
-            <Sparkles size={28} className="text-accent-foreground" />
-          </div>
+          />
           <h1 className="ios-large-title text-center">Create account</h1>
           <p className="text-muted-foreground text-[15px] mt-1 text-center">
             Start building your digital wardrobe
