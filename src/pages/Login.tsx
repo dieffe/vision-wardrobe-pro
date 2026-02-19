@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import vestryLogo from "@/assets/vestry-logo.png";
+import vestryLogo from "@/assets/vestry-logo-c.png";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
